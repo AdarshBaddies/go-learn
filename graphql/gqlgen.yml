@@ -1,0 +1,8 @@
+schema: schema.graphql
+
+models:
+  Account:
+    model: github.com/adarshbaddies/go-learn/graphql.Account
+    fields:
+      orders:
+        resolver: true
