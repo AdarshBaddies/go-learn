@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package pb;
 
+option go_package = "github.com/adarshbaddies/go-learn/account/pb";
+
 message Account {
     string id = 1;
     string name = 2;
