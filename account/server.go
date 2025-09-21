@@ -1,3 +1,6 @@
+//go:generate protoc --proto_path=proto --go_out=pb --go_opt=paths=source_relative --go-grpc_out=pb --go-grpc_opt=paths=source_relative proto/account.proto
+
+
 package account
 
 import (
@@ -24,27 +27,42 @@ func ListenGRPC(s Service, port int) error {
 
 }
 
-func (s *grpcServer) PostAccount(ctx context.Context, r *pb.) (*pb., error){ 
+func (s *grpcServer) PostAccount(ctx context.Context, r *pb.PostAccountRequest) (*pb.PostAccountResponse, error){ 
 	a, err := s.service.PostAccount(ctx, r.Name)
 	if err != nil {
-		retrun
-
-		return &pb.{}
+		return nil, err
 	}
+	return &pb.PostAccountResponse{Account: &pb.Account{
+		Id: a.ID,
+		Name: a.Name,
+	}}, nil
+}
 
-	(func(s *grpcServer) GetAccount)(ctx, BadExpr,
+func (s *grpcServer) GetAccount(ctx context.Context, r *pb.GetAccountRequest) (*pb.GetAccountResponse, error){ 
+	a, err := s.service.GetAccount(ctx, r.Name)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.GetAccountResponse{Account: &pb.Account{
+		Id: a.ID,
+		Name: a.Name,
+	}}, nil
+}
 
-		err != nil{
-			retrun, BadExpr,
+func (s *grpcServer) GetAccounts(ctx context.Context, r *pb.GetAccountsRequest) (*pb.GetAccountsResponse, error){ 
+	res, err := s.service.GetAccounts(ctx, r.Name)
+	if err != nil {
+		return nil, err
+	}
+	accounts := []*pb.Account{}
 
-			&pb._{},
-		},
-
-		(func(s *grpcServer) getAccounts)(ctx, BadExpr,
-
-			err != nil{
-				retrun, BadExpr,
-
-				&pb.{}},
-			))
+	for _, p := range res {
+		accounts = append(accounts, 
+			&pb.Account{
+				Id: p.ID,
+				Name: p.Name,
+			}
+		)
+	}
+	return &pb.GetAccountsResponse{Accounts: accounts}, nil
 }
