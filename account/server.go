@@ -21,7 +21,10 @@ func ListenGRPC(s Service, port int) error {
 		return err
 	}
 	serv := grpc.NewServer()
-	pb.RegisterAccountServiceServer(serv, &grpcServer{service: s})
+	pb.RegisterAccountServiceServer(serv, &grpcServer{
+		UnimplementedAccountServiceServer: pb.UnimplementedAccountServiceServer{},
+		service: 						   s,
+	})
 	reflection.Register(serv)
 	return serv.Serve(lis)
 
