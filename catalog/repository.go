@@ -162,7 +162,7 @@ func (r *elasticRepository) ListProducts(ctx context.Context, skip uint64, take 
 
 func (r *elasticRepository) ListProductsWithIDs(ctx context.Context, ids []string) ([]Product, error){
 
-	body := bytes.Buffer
+	var body bytes.Buffer
 	bodyItems := make([]map[string]string, len(ids))
 	for i, id := range ids {
 		bodyItems[i] = map[string]string{"_id": id}
