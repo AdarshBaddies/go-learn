@@ -31,7 +31,7 @@ type elasticRepository struct {
 type productDocument struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
-	Price       string `json:"price"`
+	Price       float64 `json:"price"`
 }
 
 type SearchResponse struct{
@@ -63,6 +63,17 @@ func NewElasticRepository(url string) (Repository, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	res, err := client.Info()
+	if err != nil {
+		return nil, errors.New("failed to connect to Elasticsearch: " + err.Error())
+	}
+	defer res.Body.Close()
+
+	if res.IsError() {
+		return nil, errors.New("elasticsearch returned error: " + res.String())
+	}
+
 	return &elasticRepository{client}, nil
 }
 
@@ -92,7 +103,11 @@ func (r *elasticRepository) PutProduct(ctx context.Context, p Product) error {
 	}
 	defer res.Body.Close()
 
-	return err
+	if res.IsError() {
+		return errors.New("failed to put product: " + res.Status())
+	}
+
+	return nil
 }
 
 func (r *elasticRepository) GetProductByID(ctx context.Context, id string) (*Product, error) {
@@ -142,6 +157,10 @@ func (r *elasticRepository) ListProducts(ctx context.Context, skip uint64, take 
 	}
 	defer res.Body.Close()
 
+	if res.StatusCode == http.StatusNotFound {
+		return nil, ErrNotFound
+	}
+
 	searchRes := SearchResponse{}
 
 	if err := json.NewDecoder(res.Body).Decode(&searchRes); err != nil {
@@ -182,6 +201,10 @@ func (r *elasticRepository) ListProductsWithIDs(ctx context.Context, ids []strin
 		return nil, err
 	}
 	defer res.Body.Close()
+
+	if res.StatusCode == http.StatusNotFound {
+		return nil, ErrNotFound
+	}
 
 	multiGetRes := MultiGetResponse{}
 	if err := json.NewDecoder(res.Body).Decode(&multiGetRes); err != nil {
@@ -230,6 +253,10 @@ func (r *elasticRepository) SearchProducts(ctx context.Context, query string, sk
 		return nil, err
 	}
 	defer res.Body.Close()
+
+	if res.StatusCode == http.StatusNotFound {
+		return nil, ErrNotFound
+	}
 
 	searchRes := SearchResponse{}
 

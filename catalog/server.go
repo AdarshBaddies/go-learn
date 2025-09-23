@@ -6,13 +6,13 @@ import (
 	"log"
 	"net"
 
-	"github.com/adarshbaddies/go-learn/account/pb"
+	"github.com/adarshbaddies/go-learn/catalog/pb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
 type grpcServer struct {
-	pb.UnimplementedAccountServiceServer
+	pb.UnimplementedCatalogServiceServer
 	service Service
 }
 
@@ -22,8 +22,8 @@ func ListenGRPC(s Service, port int) error {
 		return err
 	}
 	serv := grpc.NewServer()
-	pb.RegisterAccountServiceServer(serv, &grpcServer{ //heree
-		UnimplementedAccountServiceServer: pb.UnimplementedAccountServiceServer{},
+	pb.RegisterCatalogServiceServer(serv, &grpcServer{
+		UnimplementedCatalogServiceServer: pb.UnimplementedCatalogServiceServer{},
 		service:                           s,
 	})
 	reflection.Register(serv)
