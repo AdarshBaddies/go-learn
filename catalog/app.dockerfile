@@ -5,10 +5,9 @@ COPY go.mod go.sum ./
 COPY vendor vendor
 COPY catalog catalog
 
-RUN GO111MODULE=on go build -mod vendor -o /go/bin/app ./account/cmd/catalog
-#RUN CGO_ENABLED=0 GOOS=linux go build -o /go/bin/account_service ./account/cmd/account
+RUN go build -mod=vendor -o /go/bin/app ./catalog/cmd/catalog
 
-FROM alpine:latest
+FROM alpine:3.18
 WORKDIR /usr/bin
 COPY --from=build /go/bin .
 EXPOSE 8080
