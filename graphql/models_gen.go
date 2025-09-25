@@ -39,8 +39,8 @@ type OrderedProduct struct {
 }
 
 type PaginationInput struct {
-	Skip int `json:"skip"`
-	Take int `json:"take"`
+	Skip *int `json:"skip,omitempty"`
+	Take *int `json:"take,omitempty"`
 }
 
 type Product struct {

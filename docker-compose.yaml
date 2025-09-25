@@ -1,10 +1,89 @@
+version: "3.8"
 
 services:
   account:
+    build:
+      context: .
+      dockerfile: ./account/app.dockerfile
+    depends_on:
+      - account_db
+    environment:
+      DATABASE_URL: postgres://adarshbaddies:12345@account_db/adarshbaddies?sslmode=disable
+    restart: on-failure
+    ports:
+      - "8081:8080" # Optional: expose for local testing
+
   catalog:
+    build:
+      context: .
+      dockerfile: ./catalog/app.dockerfile
+    depends_on:
+      - catalog_db
+    environment:
+      DATABASE_URL: http://catalog_db:9200
+    restart: on-failure
+    ports:
+      - "8082:8080" # Optional
+
   order:
-  graghql:
+    build:
+      context: .
+      dockerfile: ./order/app.dockerfile
+    depends_on:
+      - order_db
+    environment:
+      DATABASE_URL: postgres://adarshbaddies:12345@order_db/adarshbaddies?sslmode=disable
+      ACCOUNT_SERVICE_URL: http://account:8080
+      CATALOG_SERVICE_URL: http://catalog:8080
+    restart: on-failure
+    ports:
+      - "8083:8080" # Optional
+
+  graphql:
+    build:
+      context: .
+      dockerfile: ./graphql/app.dockerfile
+    ports:
+      - "8000:8080"
+    depends_on:
+      - account
+      - catalog
+      - order
+    environment:
+      ACCOUNT_SERVICE_URL: http://account:8080
+      CATALOG_SERVICE_URL: http://catalog:8080
+      ORDER_SERVICE_URL: http://order:8080
+    restart: on-failure
+
   account_db:
-  catalog_db:
+    build:
+      context: ./account
+      dockerfile: ./db.dockerfile
+    environment:
+      POSTGRES_DB: adarshbaddies
+      POSTGRES_USER: adarshbaddies
+      POSTGRES_PASSWORD: 12345
+    restart: unless-stopped
+    ports:
+      - "5433:5432" # Optional for local PG access
+
   order_db:
-  
+    build:
+      context: ./order
+      dockerfile: ./db.dockerfile
+    environment:
+      POSTGRES_DB: adarshbaddies
+      POSTGRES_USER: adarshbaddies
+      POSTGRES_PASSWORD: 12345
+    restart: unless-stopped
+    ports:
+      - "5434:5432" # Optional
+
+  catalog_db:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false   # ✅ Disable auth for development
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ports:
+      - "9200:9200"

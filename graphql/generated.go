@@ -84,7 +84,7 @@ type ComplexityRoot struct {
 
 	Query struct {
 		Accounts func(childComplexity int, pagination *PaginationInput, id *string) int
-		Products func(childComplexity int, pagination *PaginationInput, query string, id *string) int
+		Products func(childComplexity int, pagination *PaginationInput, query *string, id *string) int
 	}
 }
 
@@ -98,7 +98,7 @@ type MutationResolver interface {
 }
 type QueryResolver interface {
 	Accounts(ctx context.Context, pagination *PaginationInput, id *string) ([]*Account, error)
-	Products(ctx context.Context, pagination *PaginationInput, query string, id *string) ([]*Product, error)
+	Products(ctx context.Context, pagination *PaginationInput, query *string, id *string) ([]*Product, error)
 }
 
 type executableSchema struct {
@@ -275,7 +275,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.Products(childComplexity, args["pagination"].(*PaginationInput), args["query"].(string), args["id"].(*string)), true
+		return e.complexity.Query.Products(childComplexity, args["pagination"].(*PaginationInput), args["query"].(*string), args["id"].(*string)), true
 
 	}
 	return 0, false
@@ -474,7 +474,7 @@ func (ec *executionContext) field_Query_products_args(ctx context.Context, rawAr
 		return nil, err
 	}
 	args["pagination"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "query", ec.unmarshalNString2string)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "query", ec.unmarshalOString2ᚖstring)
 	if err != nil {
 		return nil, err
 	}
@@ -1233,7 +1233,7 @@ func (ec *executionContext) _Query_products(ctx context.Context, field graphql.C
 		ec.fieldContext_Query_products,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Query().Products(ctx, fc.Args["pagination"].(*PaginationInput), fc.Args["query"].(string), fc.Args["id"].(*string))
+			return ec.resolvers.Query().Products(ctx, fc.Args["pagination"].(*PaginationInput), fc.Args["query"].(*string), fc.Args["id"].(*string))
 		},
 		nil,
 		ec.marshalNProduct2ᚕᚖgithubᚗcomᚋadarshbaddiesᚋgoᚑlearnᚋgraphqlᚐProductᚄ,
@@ -2941,14 +2941,14 @@ func (ec *executionContext) unmarshalInputPaginationInput(ctx context.Context, o
 		switch k {
 		case "skip":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("skip"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Skip = data
 		case "take":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("take"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4356,6 +4356,24 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	_ = sel
 	_ = ctx
 	res := graphql.MarshalBoolean(*v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v any) (*int, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalInt(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalInt(*v)
 	return res
 }
 
