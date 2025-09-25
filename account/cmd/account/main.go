@@ -6,6 +6,7 @@ import (
 
 	"github.com/adarshbaddies/go-learn/account"
 	"github.com/kelseyhightower/envconfig"
+	"github.com/tinrab/retry"
 )
 
 type Config struct{
@@ -20,33 +21,16 @@ func main() {
 	}
 
 	var r account.Repository
-	// retry.ForeverSleep(2*time.Second, func(_ int)(err error){
-	// 	r, err := account.NewPostgresRepository(cfg.DatabaseURL)
-	// 	if err !=nil {
-	// 		log.Println(err)
-	// 	}
-	// 	return
-	// })
-	// defer r.Close()
-	// log.Println("Listening on port 8080...")
-	// s := account.NewService(r)
-	// log.Fatal(account.ListenGRPC(s, 8080))
-
-	for {
-		log.Println("Attempting to connect to the database...")
+	retry.ForeverSleep(2*time.Second, func(_ int)(err error){
 		r, err = account.NewPostgresRepository(cfg.DatabaseURL)
-		if err == nil {
-			log.Println("Database connection successful.")
-			break
+		if err !=nil {
+			log.Println(err)
 		}
-
-		log.Printf("Failed to connect to the database: %v. Retrying in 2 seconds...\n", err)
-		time.Sleep(2 * time.Second)
-	}
-
+		return
+	})
 	defer r.Close()
-
 	log.Println("Listening on port 8080...")
 	s := account.NewService(r)
 	log.Fatal(account.ListenGRPC(s, 8080))
+
 }
