@@ -1,12 +1,9 @@
 # Go-GraphQL-gRPC Microservices Project
 
-## Technologies Used
 
-![Go](https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg)
-![PostgreSQL](https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg)
-![GraphQL](https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg)
-![gRPC](https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grpc/grpc-original.svg)
-![Docker](https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg)
+
+[![Technologies Used](https://skillicons.dev/icons?i=go,postgres,graphql,grpc,docker)](https://skillicons.dev)
+
 
 
 ## Overview
