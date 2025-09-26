@@ -2,7 +2,9 @@
 
 
 
-[![Technologies Used](https://skillicons.dev/icons?i=go,postgres,graphql,grpc,docker)](https://skillicons.dev)
+[![Technologies Used](https://skillicons.dev/icons?i=go,postgres,graphql,docker&theme=dark)](https://skillicons.dev)
+[![gRPC](https://img.shields.io/badge/gRPC-009951?style=for-the-badge&logo=grpc&logoColor=white)](https://grpc.io)
+
 
 
 
