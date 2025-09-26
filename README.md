@@ -1,6 +1,13 @@
-# Go-Learn GraphQL Microservices Project
+# Go-GraphQL-gRPC Microservices Project
 
-![Go Logo](https://golang.org/lib/godoc/images/go-logo-blue.svg)
+## Technologies Used
+
+![Go](https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg)
+![PostgreSQL](https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg)
+![GraphQL](https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg)
+![gRPC](https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grpc/grpc-original.svg)
+![Docker](https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg)
+
 
 ## Overview
 
@@ -12,15 +19,6 @@ This project demonstrates a simple, modular microservices architecture built in 
 
 The GraphQL layer aggregates these services to provide a unified API endpoint.
 
-## Technologies Used
-
-| Technology | Logo                                                                                  |
-| ---------- | ------------------------------------------------------------------------------------- |
-| Go         | ![Go Logo](https://golang.org/lib/godoc/images/go-logo-blue.svg)                      |
-| GraphQL    | ![GraphQL Logo](https://upload.wikimedia.org/wikipedia/commons/1/17/GraphQL_Logo.svg) |
-| gRPC       | ![gRPC Logo](https://grpc.io/img/grpc-logo.png)                                       |
-| Docker     | ![Docker Logo](https://www.docker.com/sites/default/files/d8/2019-07/Moby-logo.png)   |
-| PostgreSQL | ![Postgres Logo](https://www.postgresql.org/media/img/about/press/elephant.png)       |
 
 ## Project Structure
 
