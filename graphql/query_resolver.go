@@ -100,7 +100,7 @@ func (p PaginationInput) bounds() (uint64, uint64) {
 		skipValue = uint64(*p.Skip)
 	}
 	if p.Take != nil {
-		skipValue = uint64(*p.Take)
+		takeValue = uint64(*p.Take)
 	}
 
 	return skipValue, takeValue

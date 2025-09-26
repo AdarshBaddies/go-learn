@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   account:
     build:
@@ -11,7 +9,7 @@ services:
       DATABASE_URL: postgres://adarshbaddies:12345@account_db/adarshbaddies?sslmode=disable
     restart: on-failure
     ports:
-      - "8081:8080" # Optional: expose for local testing
+      - "8081:8080"
 
   catalog:
     build:
@@ -23,7 +21,7 @@ services:
       DATABASE_URL: http://catalog_db:9200
     restart: on-failure
     ports:
-      - "8082:8080" # Optional
+      - "8082:8080" 
 
   order:
     build:
@@ -33,11 +31,11 @@ services:
       - order_db
     environment:
       DATABASE_URL: postgres://adarshbaddies:12345@order_db/adarshbaddies?sslmode=disable
-      ACCOUNT_SERVICE_URL: http://account:8080
-      CATALOG_SERVICE_URL: http://catalog:8080
+      ACCOUNT_SERVICE_URL: account:8080
+      CATALOG_SERVICE_URL: catalog:8080
     restart: on-failure
     ports:
-      - "8083:8080" # Optional
+      - "8083:8080" 
 
   graphql:
     build:
@@ -50,9 +48,9 @@ services:
       - catalog
       - order
     environment:
-      ACCOUNT_SERVICE_URL: http://account:8080
-      CATALOG_SERVICE_URL: http://catalog:8080
-      ORDER_SERVICE_URL: http://order:8080
+      ACCOUNT_SERVICE_URL: account:8080
+      CATALOG_SERVICE_URL: catalog:8080
+      ORDER_SERVICE_URL: order:8080
     restart: on-failure
 
   account_db:
@@ -65,7 +63,7 @@ services:
       POSTGRES_PASSWORD: 12345
     restart: unless-stopped
     ports:
-      - "5433:5432" # Optional for local PG access
+      - "5433:5432" 
 
   order_db:
     build:
@@ -77,13 +75,14 @@ services:
       POSTGRES_PASSWORD: 12345
     restart: unless-stopped
     ports:
-      - "5434:5432" # Optional
+      - "5434:5432" 
 
   catalog_db:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
     environment:
       - discovery.type=single-node
-      - xpack.security.enabled=false   # ✅ Disable auth for development
-      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - xpack.security.enabled=false  
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - logger.level=warn
     ports:
       - "9200:9200"
